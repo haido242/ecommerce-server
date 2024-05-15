@@ -1,14 +1,15 @@
 // create schema user
-import mongoose from 'mongoose';
+import { model, Schema, Document} from 'mongoose';
+import { User } from 'interfaces/users.interface';
 
-const addressSchema = new mongoose.Schema({
+const addressSchema: Schema = new Schema({
     street: String,
     ward: String,
     district: String,
     city: String,
 });
 
-const userSchema = new mongoose.Schema({
+const userSchema: Schema = new Schema({
     email: {
         type: String,
         required: true,
@@ -41,6 +42,6 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+const UserModel = model<User & Document>('User', userSchema);
+export default UserModel;
 
