@@ -34,4 +34,26 @@ export default class CartController {
       res.status(500).json({ message: error.message });
     }
   };
+
+  // clear cart
+  public clearCart = async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const cart = await this.cartService.clearCart(userId);
+      res.status(200).json({ data: cart, message: "clearCart" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  // change quantity of product in cart
+  public changeQuantity = async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const { productId, quantity } = req.body;
+      const cart = await this.cartService.updateQuantity(userId, productId, quantity);
+      res.status(200).json({ data: cart, message: "changeQuantity" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
 }

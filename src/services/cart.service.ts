@@ -12,6 +12,7 @@ export default class CartService {
   }
 
   public async addToCart(userId, productId, quantity) {
+    quantity = parseInt(quantity);
     const user = await UserModel.findById(userId);
     const product = await this.product.findById(productId);
     if (!product) {
@@ -34,7 +35,8 @@ export default class CartService {
       } else {
         cart.cartItems[productIndex].quantity += quantity;
       }
-      cart.totalPrice += product.price * quantity;
+      cart.totalPrice = await this.calculateTotalPrice(cart);
+      
       await cart.save();
     }
 
@@ -42,7 +44,7 @@ export default class CartService {
   }
 
   public async removeFromCart(userId, productId) {
-    const cart = await this.cart.findOne({ userId });
+    const cart = await this.cart.findOne({user: userId });
     if (!cart) {
       throw new Error("Cart not found");
     }
@@ -53,6 +55,52 @@ export default class CartService {
     }
 
     cart.cartItems.splice(productIndex, 1);
+    if(cart.cartItems.length === 0) {
+      cart.totalPrice = 0;
+    } else {
+      cart.totalPrice = await this.calculateTotalPrice(cart);
+    }
+    await cart.save();
+    return cart;
+  }
+
+  private async calculateTotalPrice(cart) {
+    const productPrices = await Promise.all(
+      cart.cartItems.map(async item => {
+        const product = await this.product.findById(item.product);
+        return product.price * item.quantity;
+      })
+    );
+    return productPrices.reduce((a, b) => a + b, 0);
+  }
+
+  public async clearCart(userId) {
+    const cart = await this.cart.findOne({ user: userId });
+    if (!cart) {
+      throw new Error("Cart not found");
+    }
+    cart.set({ cartItems: [] });
+    cart.totalPrice = 0;
+    await cart.save();
+
+    return cart;
+  }
+
+  // change the quantity of a product in the cart
+  public async updateQuantity(userId, productId, quantity) {
+    quantity = parseInt(quantity);
+    const cart = await this.cart.findOne({ user: userId });
+    if (!cart) {
+      throw new Error("Cart not found");
+    }
+
+    const productIndex = cart.cartItems.findIndex(p => p.product == productId);
+    if (productIndex === -1) {
+      throw new Error("Product not found in cart");
+    }
+
+    cart.cartItems[productIndex].quantity = quantity;
+    cart.totalPrice = await this.calculateTotalPrice(cart);
     await cart.save();
 
     return cart;
