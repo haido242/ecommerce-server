@@ -1,23 +1,10 @@
 import CategoryModel from "../models/category";
+import BaseService from "./base.service";
 
-export default class CategoryService {
-  public async createCategory(name: string, description: string) {
-    return CategoryModel.create({ name, description });
+export default class CategoryService extends BaseService{
+  constructor() {
+    const categoryModel = CategoryModel;
+    super(categoryModel as any);
   }
 
-  public async getCategories() {
-    return CategoryModel.find();
-  }
-
-  public async getCategoryById(id: string) {
-    return CategoryModel.findById(id);
-  }
-
-  public async updateCategory(id: string, name: string, description: string) {
-    return CategoryModel.findByIdAndUpdate(id, { name, description });
-  }
-
-  public async deleteCategory(id: string) {
-    return CategoryModel.findByIdAndDelete(id);
-  }
 }

@@ -13,10 +13,10 @@ export default class CategoryRoute {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.categoryController.getCategories);
-    this.router.get(`${this.path}/:id`, this.categoryController.getCategoryById);
-    this.router.post(`${this.path}`, authMiddleware, authorize(["admin"]), this.categoryController.createCategory);
-    this.router.put(`${this.path}/:id`, authMiddleware, authorize(["admin"]), this.categoryController.updateCategory);
-    this.router.delete(`${this.path}/:id`, authMiddleware, authorize(["admin"]), this.categoryController.deleteCategory);
+    this.router.get(`${this.path}`, this.categoryController.get);
+    this.router.get(`${this.path}/:id`, this.categoryController.getById);
+    this.router.post(`${this.path}`, authMiddleware, authorize(["admin"]), this.categoryController.create);
+    this.router.put(`${this.path}/:id`, authMiddleware, authorize(["admin"]), this.categoryController.update);
+    this.router.delete(`${this.path}/:id`, authMiddleware, authorize(["admin"]), this.categoryController.delete);
   }
 }
