@@ -60,18 +60,15 @@ const orderSchema = new mongoose.Schema({
         required: true,
         default: 0.0,
     },
-    isPaid: {
-        type: Boolean,
-        default: false,
-    },
-    isDelivered: {
-        type: Boolean,
-        default: false,
+    status: {
+        type: String,
+        required: true,
+        default: "Created",
     },
     deliveredAt: {
         type: Date,
     },
 });
 
-const Order = mongoose.model("Order", orderSchema);
-module.exports = Order;
+const OrderModel = mongoose.model("Order", orderSchema);
+export default OrderModel;

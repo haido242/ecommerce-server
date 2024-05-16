@@ -56,4 +56,17 @@ export default class CartController {
       res.status(500).json({ message: error.message });
     }
   };
+
+  // checkout 
+  public checkout = async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const shippingAddress = req.body.shippingAddress;
+      const paymentMethod = req.body.paymentMethod;
+      const cart = await this.cartService.checkout(userId, shippingAddress, paymentMethod);
+      res.status(200).json({ data: cart, message: "checkout" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
 }

@@ -1,6 +1,7 @@
 import CartModel from "../models/cart";
 import ProductModel from "../models/product";
-import UserModel from "models/user";
+import UserModel from "../models/user";
+import OrderModel from "../models/order";
 
 export default class CartService {
   public cart = CartModel;
@@ -98,7 +99,9 @@ export default class CartService {
     if (productIndex === -1) {
       throw new Error("Product not found in cart");
     }
-
+    if (quantity <= 0) {
+      throw new Error("Quantity must be greater than 0");
+    }
     cart.cartItems[productIndex].quantity = quantity;
     cart.totalPrice = await this.calculateTotalPrice(cart);
     await cart.save();
@@ -106,4 +109,36 @@ export default class CartService {
     return cart;
   }
 
+  public async checkout(userId, shippingAddress, paymentMethod) {
+    const cart = await this.cart.findOne({ user: userId });
+    if (!cart) {
+      throw new Error("Cart not found");
+    }
+
+    const orderItems = await Promise.all(
+      cart.cartItems.map(async item => {
+        const product = await this.product.findById(item.product);
+        return {
+          product: product,
+          quantity: item.quantity,
+        };
+      })
+    );
+
+    const totalPrice = await this.calculateTotalPrice(cart);
+    const order = new OrderModel({
+      user: userId,
+      orderItems: orderItems,
+      shippingAddress: shippingAddress,
+      paymentInfo: {
+        paymentMethod: paymentMethod,
+      },
+      totalPrice: totalPrice,
+    });
+    await order.save();
+    await this.clearCart(userId);
+
+    return order;
+  }
+  
 }
