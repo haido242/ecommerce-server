@@ -12,3 +12,8 @@ const categorySchema = new mongoose.Schema({
 
 const CategoryModel = mongoose.model("Category", categorySchema);
 export default CategoryModel;
+
+export interface Category {
+  name: string;
+  description: string;
+}
