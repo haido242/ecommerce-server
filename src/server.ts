@@ -6,6 +6,7 @@ import validateEnv from './utils/validateEnv';
 import ProductRoute from './routers/product.route';
 import CategoryRoute from './routers/category.route';
 import CartRoute from './routers/cart.route';
+import OrderRoute from './routers/order.route';
 
 
 validateEnv();
@@ -16,7 +17,8 @@ const app = new App([
   new AuthRoute(), 
   new ProductRoute(),
   new CategoryRoute(),
-  new CartRoute()
+  new CartRoute(),
+  new OrderRoute()
 ]);
 
 app.listen();
