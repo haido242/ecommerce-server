@@ -8,4 +8,10 @@ export default class OrderService {
     const orders = await this.order.find();
     return orders;
   }
+
+  //get order by id
+  public async getOrderById(orderId) {
+    const order = await this.order.findById(orderId);
+    return order;
+  }
 }

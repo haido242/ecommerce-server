@@ -11,4 +11,18 @@ export default class OrderController {
       res.status(500).json({ message: error.message });
     }
   };
+
+  public getOrderById = async (req, res) => {
+    const orderId = req.params.id;
+
+    try {
+      const order = await this.orderService.getOrderById(orderId);
+      if (!order) {
+        res.status(404).json({ message: "Order not found" });
+      }
+      res.status(200).json({ data: order, message: "getOrderById" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
 }
