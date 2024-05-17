@@ -25,4 +25,16 @@ export default class OrderController {
       res.status(500).json({ message: error.message });
     }
   };
+
+  public updateOrderStatus = async (req, res) => {
+    const orderId = req.params.id;
+    const status = req.body.status;
+
+    try {
+      const updatedOrder = await this.orderService.updateOrderStatus(orderId, status);
+      res.status(200).json({ data: updatedOrder, message: "updateOrderStatus" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
 }

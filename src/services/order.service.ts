@@ -14,4 +14,10 @@ export default class OrderService {
     const order = await this.order.findById(orderId);
     return order;
   }
+
+  // change order status
+  public async updateOrderStatus(orderId, status) {
+    const updatedOrder = await this.order.findByIdAndUpdate(orderId, { status }, { new: true });
+    return updatedOrder;
+  }
 }
