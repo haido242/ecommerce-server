@@ -1,6 +1,6 @@
 import OrderModel from "../models/order";
 
-export default class OrderService {
+class OrderService {
   public order = OrderModel;
 
   // get all orders
@@ -21,3 +21,5 @@ export default class OrderService {
     return updatedOrder;
   }
 }
+
+export default OrderService;

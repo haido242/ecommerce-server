@@ -7,6 +7,7 @@ import ProductRoute from './routers/product.route';
 import CategoryRoute from './routers/category.route';
 import CartRoute from './routers/cart.route';
 import OrderRoute from './routers/order.route';
+import PaymentRoute from './routers/payment.route';
 
 
 validateEnv();
@@ -18,7 +19,8 @@ const app = new App([
   new ProductRoute(),
   new CategoryRoute(),
   new CartRoute(),
-  new OrderRoute()
+  new OrderRoute(),
+  new PaymentRoute(),
 ]);
 
 app.listen();
