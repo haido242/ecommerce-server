@@ -2,10 +2,13 @@ import CartModel from "../models/cart";
 import ProductModel from "../models/product";
 import UserModel from "../models/user";
 import OrderModel from "../models/order";
+import OrderService from "./order.service";
 
 export default class CartService {
   public cart = CartModel;
   public product = ProductModel;
+  public user = UserModel;
+  public orderService = new OrderService();
 
   public async getCart(userId) {
     const cart = await this.cart.findOne({ user: userId });
@@ -14,7 +17,7 @@ export default class CartService {
 
   public async addToCart(userId, productId, quantity) {
     quantity = parseInt(quantity);
-    const user = await UserModel.findById(userId);
+    const user = await this.user.findById(userId);
     const product = await this.product.findById(productId);
     if (!product) {
       throw new Error("Product not found");
@@ -115,6 +118,10 @@ export default class CartService {
       throw new Error("Cart not found");
     }
 
+    if(!cart.cartItems.length) {
+      console.log("Cart is empty")
+      throw new Error("Cart is empty");
+    };
     const orderItems = await Promise.all(
       cart.cartItems.map(async item => {
         const product = await this.product.findById(item.product);
@@ -126,18 +133,15 @@ export default class CartService {
     );
 
     const totalPrice = await this.calculateTotalPrice(cart);
-    const order = new OrderModel({
+    const data = new OrderModel({
       user: userId,
-      orderItems: orderItems,
-      shippingAddress: shippingAddress,
-      paymentInfo: {
-        paymentMethod: paymentMethod,
-      },
-      totalPrice: totalPrice,
+      orderItems,
+      shippingAddress,
+      paymentMethod,
+      totalPrice,
     });
-    await order.save();
+    const order = await this.orderService.create(data);
     await this.clearCart(userId);
-
     return order;
   }
   

@@ -3,23 +3,25 @@ import CryptoJS from "crypto-js";
 import moment from "moment";
 import { HttpException } from "../../exceptions/HttpException";
 import { ZALOPAY_APPID, ZALOPAY_KEY1, ZALOPAY_KEY2, ZALOPAY_ENDPOINT, ZALOPAY_GETLISTMERCHANTBANKS } from "../../config";
-import express from 'express';
 import axios from "axios";
+import ProductService from "../../services/product.services";
 
 class ZalopayService {
+  public orderService = new OrderService();
+  public productService = new ProductService();
 
   public async createOrder(orderId: string) {
-    const orderService = new OrderService();
     const transID = Math.floor(Math.random() * 1000000).toString();
-    const orderDetail = await orderService.getOrderById(orderId);
+    const orderDetail = await this.orderService.getOrderById(orderId);
     if (!orderDetail) throw new HttpException(409, "Order not found");
-    const embedData = {};
+    const embedData = {orderId: orderId};
     const item = orderDetail.orderItems.map((item) => {
       return {
         item_name: item.id,
         item_quantity: item.quantity,
       }
     });
+    const callbackUrl = "https://ecommerce-server-82px.onrender.com/api/zalopay/paid"
     let order = {
       app_id: ZALOPAY_APPID,
       app_trans_id: `${moment().format('YYMMDD')}_${transID}`,
@@ -29,7 +31,8 @@ class ZalopayService {
       embed_data: JSON.stringify(embedData),
       amount: orderDetail.totalPrice,
       description: `Thanh toán đơn hàng ${orderId}`,
-      mac: ""
+      mac: "",
+      callback_url: callbackUrl,
     }
     const data = ZALOPAY_APPID 
     + "|" + order.app_trans_id 
@@ -39,10 +42,7 @@ class ZalopayService {
     + "|" + order.embed_data 
     + "|" + order.item;
     order.mac = CryptoJS.HmacSHA256(data, ZALOPAY_KEY1).toString();
-    console.log("order", order);
     const response = await axios.post(ZALOPAY_ENDPOINT, null, { params: order });
-
-    // Return only the necessary data from the response
     return response.data;
   }
 }
