@@ -112,7 +112,7 @@ export default class CartService {
     return cart;
   }
 
-  public async checkout(userId, shippingAddress, paymentMethod) {
+  public async checkout(userId, shippingAddress, paymentInfo) {
     const cart = await this.cart.findOne({ user: userId });
     if (!cart) {
       throw new Error("Cart not found");
@@ -137,7 +137,7 @@ export default class CartService {
       user: userId,
       orderItems,
       shippingAddress,
-      paymentMethod,
+      paymentInfo,
       totalPrice,
     });
     const order = await this.orderService.create(data);

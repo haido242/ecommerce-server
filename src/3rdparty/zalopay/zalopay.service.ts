@@ -10,17 +10,11 @@ class ZalopayService {
   public orderService = new OrderService();
   public productService = new ProductService();
 
-  public async createOrder(orderId: string) {
+  public async createOrder(orderDetail: any) {
     const transID = Math.floor(Math.random() * 1000000).toString();
-    const orderDetail = await this.orderService.getOrderById(orderId);
     if (!orderDetail) throw new HttpException(409, "Order not found");
-    const embedData = {orderId: orderId};
-    const item = orderDetail.orderItems.map((item) => {
-      return {
-        item_name: item.id,
-        item_quantity: item.quantity,
-      }
-    });
+    const embedData = {orderId: orderDetail._id};
+    const item = orderDetail.orderItems || [];
     const callbackUrl = "https://ecommerce-server-82px.onrender.com/api/zalopay/paid"
     let order = {
       app_id: ZALOPAY_APPID,
@@ -30,7 +24,7 @@ class ZalopayService {
       item: JSON.stringify(item),
       embed_data: JSON.stringify(embedData),
       amount: orderDetail.totalPrice,
-      description: `Thanh toán đơn hàng ${orderId}`,
+      description: `Thanh toán đơn hàng ${orderDetail._id}`,
       mac: "",
       callback_url: callbackUrl,
     }

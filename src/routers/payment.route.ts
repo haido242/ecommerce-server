@@ -14,7 +14,7 @@ class PaymentRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/zalopay`, authMiddleware, this.paymentController.createZalopayOrder);
+    this.router.post(`${this.path}/create`, authMiddleware, this.paymentController.createOrder);
   }
 }
 

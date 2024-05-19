@@ -7,6 +7,7 @@ class OrderService extends BaseService{
     super(orderModel as any);
   }
   
+  
 }
 
 export default OrderService;
