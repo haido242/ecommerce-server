@@ -23,15 +23,26 @@ class PaymentService {
     }
   }
 
-  private zalopayService = new ZalopayService();
-  public async createZalopayOrder(orderId: string) {
-    const orderDetail = await this.order.findById(orderId);
+  public async changeOrderStatus(orderId: string, status: string = "paid") {
+    return await this.order.findByIdAndUpdate(orderId, { status });
+  }
+
+  private validateOrder(orderDetail) {
     if (!orderDetail) {
       throw new Error("Order not found");
     }
     if(!orderDetail.totalPrice) {
       throw new Error("Order total price is invalid");
     }
+    if(orderDetail.status == "paid") {
+      throw new Error("Order has been paid");
+    }
+  }
+
+  private zalopayService = new ZalopayService();
+  public async createZalopayOrder(orderId: string) {
+    const orderDetail = await this.order.findById(orderId);
+    this.validateOrder(orderDetail);
     return await this.zalopayService.createOrder(orderDetail);
   }
 }

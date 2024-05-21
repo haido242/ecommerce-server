@@ -12,4 +12,15 @@ export default class PaymentController {
       res.status(500).json({ message: error.message });
     }
   }
+
+  public changeOrderStatus = async (req, res) => {
+    try {
+      const orderId = req.body.orderId;
+      const status = req.body.status;
+      const order = await this.paymentService.changeOrderStatus(orderId, status);
+      res.status(200).json({ data: order, message: "change order status" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 }
