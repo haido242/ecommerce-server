@@ -23,7 +23,7 @@ class AuthService {
     return createUserData;
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User, tokenData: TokenData }> {
+  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: Partial<User> & { token: string } }> {
     if (isEmpty(userData)) throw new HttpException(400, "userData is empty");
 
     const findUser: User = await this.users.findOne({ email: userData.email });
@@ -34,8 +34,15 @@ class AuthService {
 
     const tokenData = this.createToken(findUser);
     const cookie = this.createCookie(tokenData);
-
-    return { cookie, findUser, tokenData };
+    
+    const filteredUser = {
+      _id: findUser._id,
+      email: findUser.email,
+      role: findUser.role,
+      token: tokenData.token
+    };
+  
+    return { cookie, findUser: filteredUser };
   }
 
   public async logout(userData: User): Promise<User> {
