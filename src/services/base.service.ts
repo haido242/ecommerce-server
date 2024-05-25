@@ -2,22 +2,21 @@
 import { Document, Model } from 'mongoose';
 
 export default class BaseService {
-  protected Model: Model<Document>;
+    protected Model: Model<Document>;
 
-  constructor(Model: Model<Document>) {
-    this.Model = Model;
-  }
+    constructor(Model: Model<Document>) {
+        this.Model = Model;
+    }
 
-  public async create(data: any) {
-    return this.Model.create(data);
-  }
+    public async create(data: any) {
+        return this.Model.create(data);
+    }
 
-  public async get() {
-    return this.Model.find();
-  }
+    public async get() {
+        return this.Model.find();
+    }
 
-  public async getById(id: string)
-    {
+    public async getById(id: string) {
         return this.Model.findById(id);
     }
 
