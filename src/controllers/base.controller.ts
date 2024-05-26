@@ -12,7 +12,11 @@ export default class BaseController {
         try {
         const data = req.body;
         const result = await this.service.create(data);
-        res.status(201).json(result);
+        res.status(201).json({
+            message: 'success',
+            data: result
+        
+        });
         } catch (error) {
         res.status(500).json({error: error.message});
         }
@@ -21,9 +25,13 @@ export default class BaseController {
     public get = async (req: any, res: any) => {
         try {
         const result = await this.service.get();
-        res.status(200).json(result);
+        res.status(200).json({
+            message: 'success',
+            data: result
+        
+        });
         } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({message : 'error' ,error: error.message});
         }
     }
     
@@ -32,12 +40,16 @@ export default class BaseController {
         const {id} = req.params;
         const result = await this.service.getById(id);
         if (!result) {
-            res.status(404).json({error: 'Not found'});
+            res.status(404).json({message : 'error' ,error: 'Not found'});
         } else {
-            res.status(200).json(result);
+            res.status(200).json({
+                message: 'success',
+                data: result
+            
+            });
         }
         } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({message : 'error' ,error: error.message});
         }
     }
     
@@ -47,12 +59,16 @@ export default class BaseController {
         const data = req.body;
         const result = await this.service.update(id, data);
         if (!result) {
-            res.status(404).json({error: 'Not found'});
+            res.status(404).json({message : 'error' ,error: 'Not found'});
         } else {
-            res.status(200).json(result);
+            res.status(200).json({
+                message: 'success',
+                data: result
+            
+            });
         }
         } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({message : 'error' ,error: error.message});
         }
     }
     
@@ -61,12 +77,16 @@ export default class BaseController {
         const {id} = req.params;
         const result = await this.service.delete(id);
         if (!result) {
-            res.status(404).json({error: 'Not found'});
+            res.status(404).json({message : 'error' ,error: 'Not found'});
         } else {
-            res.status(200).json(result);
+            res.status(200).json({
+                message: 'success',
+                data: result
+            
+            });
         }
         } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({message : 'error' ,error: error.message});
         }
     }
     }
