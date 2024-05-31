@@ -28,6 +28,10 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  createAt: {
+    type: Date,
+    default: Date.now,
+  },
     rating: {
         type: Number,
         default: 0,
