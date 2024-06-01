@@ -30,18 +30,21 @@ const productSchema = new mongoose.Schema({
   },
   createAt: {
     type: Date,
-    default: Date.now,
+    default: Date.now(),
   },
-    rating: {
-        type: Number,
-        default: 0,
-    },
-    category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-    },
-    attributes: [attributeSchema],
-
+  rating: {
+    type: Number,
+    default: 0,
+  },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+  },
+  attributes: [attributeSchema],
+  status: {
+    type: String,
+    default: "Published",
+  }
 });
 
 const ProductModel = mongoose.model("Product", productSchema);

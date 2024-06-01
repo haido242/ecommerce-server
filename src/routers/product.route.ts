@@ -13,6 +13,7 @@ export default class ProductRoute {
   }
 
   private initializeRoutes() {
+    this.router.get(`${this.path}/low-stock`, this.productController.getLowStock);
     this.router.get(`${this.path}`, this.productController.get);
     this.router.get(`${this.path}/:id`, this.productController.getById);
     this.router.post(`${this.path}`, authMiddleware, authorize(["admin"]), this.productController.create);

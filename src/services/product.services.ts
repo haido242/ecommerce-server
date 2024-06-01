@@ -7,4 +7,12 @@ export default class ProductService extends BaseService{
     const productModel = ProductModel;
     super(productModel as any);
   }
+
+  public override async get() {
+    return await this.Model.find().populate('category', 'name').exec();
+  }
+
+  public async getLowStock() {
+    return await this.Model.find({ stockQuantity: { $lt: 10 } }).populate('category', 'name').exec();
+  }
 }
