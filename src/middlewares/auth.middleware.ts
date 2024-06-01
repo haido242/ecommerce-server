@@ -7,11 +7,10 @@ import UserModel from "../models/user";
 
 const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
-    const Authorization = req.cookies['Authorization'] || (req.header('Authorization') ? req.header('Authorization').split('Bearer ')[1] : null);
-
-    if (Authorization) {
+    const authorizationHeader = req.header('Authorization');
+    if (authorizationHeader) {
       const secretKey: string = SECRET_KEY;
-      const verificationResponse = (await verify(Authorization, secretKey)) as DataStoredInToken;
+      const verificationResponse = (await verify(authorizationHeader, secretKey)) as DataStoredInToken;
       const userId = verificationResponse._id;
       const findUser = await UserModel.findById(userId);
 

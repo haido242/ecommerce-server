@@ -119,7 +119,6 @@ export default class CartService {
     }
 
     if(!cart.cartItems.length) {
-      console.log("Cart is empty")
       throw new Error("Cart is empty");
     };
     const orderItems = await Promise.all(

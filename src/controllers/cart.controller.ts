@@ -63,7 +63,6 @@ export default class CartController {
       const userId = req.params.userId;
       const shippingAddress = req.body.shippingAddress;
       const paymentInfo = req.body.paymentInfo;
-      console.log("paymentInfo", paymentInfo )
       const cart = await this.cartService.checkout(userId, shippingAddress, paymentInfo);
       res.status(200).json({ data: cart, message: "checkout" });
     } catch (error) {
