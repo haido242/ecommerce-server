@@ -34,7 +34,6 @@ class AuthService {
 
     const tokenData = this.createToken(findUser);
     const cookie = this.createCookie(tokenData);
-    
     const filteredUser = {
       _id: findUser._id,
       email: findUser.email,
