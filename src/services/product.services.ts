@@ -6,8 +6,12 @@ export default class ProductService extends BaseService{
     super(productModel as any);
   }
 
-  public override async get() {
-    return await this.Model.find().populate('category', 'name').exec();
+  public override async get(p, l) {
+    // return await this.Model.find().populate('category', 'name').exec();
+    const skip = (p - 1) * l;
+    const data = await this.Model.find().populate('category', 'name').skip(skip).limit(l);
+    const total = await this.Model.countDocuments();
+    return { data, total };
   }
 
   public async getLowStock() {

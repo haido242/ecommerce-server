@@ -23,15 +23,21 @@ export default class BaseController {
     }
     
     public get = async (req: any, res: any) => {
+        const {page, limit} = req.query;
+        //default value
+        const p = page ? parseInt(page) : 1;
+        const l = limit ? parseInt(limit) : 10;
         try {
-        const result = await this.service.get();
-        res.status(200).json({
-            message: 'success',
-            data: result
-        
-        });
+            const result = await this.service.get(p, l)
+            res.status(200).json({
+                message: 'success',
+                data: result.data,
+                total: result.total,
+                page: p,
+                limit: l
+            });
         } catch (error) {
-        res.status(500).json({message : 'error' ,error: error.message});
+            res.status(500).json({message : 'error' ,error: error.message});
         }
     }
     
@@ -39,6 +45,24 @@ export default class BaseController {
         try {
         const {id} = req.params;
         const result = await this.service.getById(id);
+        if (!result) {
+            res.status(404).json({message : 'error' ,error: 'Not found'});
+        } else {
+            res.status(200).json({
+                message: 'success',
+                data: result
+            
+            });
+        }
+        } catch (error) {
+        res.status(500).json({message : 'error' ,error: error.message});
+        }
+    }
+
+    public getByArrayIds = async (req: any, res: any) => {
+        try {
+        const {ids} = req.body;
+        const result = await this.service.getByArrayIds(ids);
         if (!result) {
             res.status(404).json({message : 'error' ,error: 'Not found'});
         } else {

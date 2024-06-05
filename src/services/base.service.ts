@@ -12,8 +12,11 @@ export default class BaseService {
         return this.Model.create(data);
     }
 
-    public async get() {
-        return this.Model.find();
+    public async get(page: number, limit: number) {
+        const skip = (page - 1) * limit;
+        const data = await this.Model.find().skip(skip).limit(limit);
+        const total = await this.Model.countDocuments();
+        return { data, total };
     }
 
     public async getById(id: string) {
@@ -26,6 +29,10 @@ export default class BaseService {
 
     public async delete(id: string) {
         return this.Model.findByIdAndDelete(id);
+    }
+
+    public async getByArrayIds(ids: string[]) {
+        return this.Model.find({ _id: { $in: ids } });
     }
 
 }

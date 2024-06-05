@@ -6,6 +6,10 @@ class OrderService extends BaseService{
     const orderModel = OrderModel;
     super(orderModel as any);
   }
+  public order = OrderModel;
+  getOrdersByUserId = async (userId: string) => {
+    return await this.order.find({ user: userId });
+  }
   
   
 }
