@@ -44,7 +44,23 @@ const productSchema = new mongoose.Schema({
   status: {
     type: String,
     default: "Published",
-  }
+  },
+  weight: {
+    type: Number,
+    required: true,
+  },
+  length: {
+    type: Number,
+    required: true,
+  },
+  width: {
+    type: Number,
+    required: true,
+  },
+  height: {
+    type: Number,
+    required: true,
+  },
 });
 
 const ProductModel = mongoose.model("Product", productSchema);
