@@ -12,9 +12,9 @@ export default class BaseService {
         return this.Model.create(data);
     }
 
-    public async get(page: number, limit: number) {
+    public async get(page: number, limit: number, sort: string, order: number) {
         const skip = (page - 1) * limit;
-        const data = await this.Model.find().skip(skip).limit(limit);
+        const data = await this.Model.find().skip(skip).limit(limit).sort({ [sort]: order } as any);
         const total = await this.Model.countDocuments();
         return { data, total };
     }
