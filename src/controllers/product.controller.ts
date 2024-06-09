@@ -1,6 +1,6 @@
 import ProductService from "../services/product.services";
 import BaseController from "./base.controller";
-import uploadImage from "utils/cloudinary";
+import {uploadImage} from "utils/cloudinary";
 
 export default class ProductController extends BaseController{
   private productService: ProductService;
@@ -11,8 +11,10 @@ export default class ProductController extends BaseController{
   }
 
   public override create = async (req: any, res: any) => {
+    console.log("body", req.body)
     try {
       const file = req.file;
+      console.log("file", req.file)
       const data = req.body;
       const image = await uploadImage(file);
       data.image = image.url;
@@ -22,6 +24,7 @@ export default class ProductController extends BaseController{
         data: result,
       });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: error.message });
     }
   }

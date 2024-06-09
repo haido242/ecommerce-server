@@ -28,4 +28,9 @@ const uploadImage = async (file: any): Promise<UploadApiResponse> => {
   });
 };
 
-export default uploadImage;
+// Hàm upload nhiều file
+const uploadImages = async (files: any[]): Promise<UploadApiResponse[]> => {
+  return Promise.all(files.map(file => uploadImage(file)));
+};
+
+export { uploadImage, uploadImages };

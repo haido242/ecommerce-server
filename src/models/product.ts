@@ -61,6 +61,10 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  isPhysicalProduct: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const ProductModel = mongoose.model("Product", productSchema);
