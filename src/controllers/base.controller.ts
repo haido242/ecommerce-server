@@ -63,7 +63,8 @@ export default class BaseController {
 
     public getByArrayIds = async (req: any, res: any) => {
         try {
-        const {ids} = req.body;
+        let {ids} = req.query;
+        ids = ids.split(',');
         const result = await this.service.getByArrayIds(ids);
         if (!result) {
             res.status(404).json({message : 'error' ,error: 'Not found'});

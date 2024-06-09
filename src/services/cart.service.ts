@@ -68,13 +68,16 @@ export default class CartService {
     return cart;
   }
 
-  private async calculateTotalPrice(cart) {
+  private async calculateTotalPrice(cart: any) {
     const productPrices = await Promise.all(
-      cart.cartItems.map(async item => {
+      cart.cartItems.map(async (item: any) => {
         const product = await this.product.findById(item.product);
-        return product.price * item.quantity;
+        console.log(product);
+        const price = product?.price ?? 0;
+        return price * item.quantity;
       })
     );
+    console.log("pricecccccc", productPrices.reduce((a, b) => a + b, 0));
     return productPrices.reduce((a, b) => a + b, 0);
   }
 
@@ -97,7 +100,6 @@ export default class CartService {
     if (!cart) {
       throw new Error("Cart not found");
     }
-
     const productIndex = cart.cartItems.findIndex(p => p.product == productId);
     if (productIndex === -1) {
       throw new Error("Product not found in cart");
