@@ -11,7 +11,26 @@ class OrderService extends BaseService{
     return await this.order.find({ user: userId });
   }
   
+  public override async get(page: number, limit: number, sort: string, order: number) {
+    const skip = (page - 1) * limit;
+    const data = await this.order
+      .find()
+      .skip(skip)
+      .limit(limit)
+      .sort({ [sort]: order } as any)
+      .populate('user', '-password') // Populate user and exclude password field
+      .populate({
+        path: 'orderItems.product',
+        model: 'Product'
+      })
+      .exec();
+    const total = await this.order.countDocuments();
+    return { data, total };
+  }
   
+  public async changeStatus(id: string, status: string) {
+    return await this.order.findByIdAndUpdate(id, { status });
+  }
 }
 
 export default OrderService;
