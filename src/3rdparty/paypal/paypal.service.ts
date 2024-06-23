@@ -21,8 +21,8 @@ class PaypalService {
         "payment_method": "paypal"
       },
       "redirect_urls": {
-        "return_url": "http://localhost:3001/success",
-        "cancel_url": "http://localhost:3001/shop/cart"
+        "return_url": "https://ecommerce-server-82px.onrender.com/success",
+        "cancel_url": "https://ecommerce-server-82px.onrender.com/shop/cart"
       },
       "transactions": [{
         "amount": {

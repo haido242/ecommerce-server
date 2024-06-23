@@ -31,7 +31,7 @@ class VNPayService {
           vnp_TxnRef: orderDetail._id,
           vnp_OrderInfo: 'Payment for order ${orderDetail._id}',
           vnp_OrderType: 'billpayment',
-          vnp_ReturnUrl: `http://localhost:3001/success`,
+          vnp_ReturnUrl: `https://ecommerce-server-82px.onrender.com/success`,
       });
       console.log("urlString", urlString)
     return urlString;
