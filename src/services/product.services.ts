@@ -11,7 +11,7 @@ export default class ProductService extends BaseService{
     let query = this.Model.find();
     
     if (keyword) {
-      query = query.find({ $text: { $search: keyword } });
+      query = query.find({ $or: [{ name: { $regex: keyword, $options: 'i' } }, { description: { $regex: keyword, $options: 'i' } }] });
     }
     
     if (category) {
