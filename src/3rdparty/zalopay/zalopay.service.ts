@@ -15,7 +15,7 @@ class ZalopayService {
     if (!orderDetail) throw new HttpException(409, "Order not found");
     const embedData = {orderId: orderDetail._id};
     const item = orderDetail.orderItems || [];
-    const callbackUrl = "https://ecommerce-server-82px.onrender.com/api/zalopay/paid"
+    const callbackUrl = "https://ecommerce-91256.web.app//api/zalopay/paid"
     let order = {
       app_id: ZALOPAY_APPID,
       app_trans_id: `${moment().format('YYMMDD')}_${transID}`,
