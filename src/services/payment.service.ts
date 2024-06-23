@@ -1,5 +1,7 @@
 import PaypalService from "3rdparty/zalopay/paypal.service";
 import ZalopayService from "../3rdparty/zalopay/zalopay.service";
+import VNPayService from "../3rdparty/vnpay/vnpay.service";
+
 import OrderModel from "../models/order";
 
 class PaymentService {
@@ -16,8 +18,7 @@ class PaymentService {
       case "paypal":
         return await this.createPaypalOrder(orderDetail.id);
       case "vnpay": 
-        // create order on Vnpay
-        break;
+        return await this.createVNPayOrder(orderDetail.id);
       default:
         throw new Error("Payment method is not supported");
     }
@@ -51,6 +52,15 @@ class PaymentService {
     this.validateOrder(orderDetail);
     return await this.paypalService.createOrder(orderDetail);
   }
+
+  private vnpayService = new VNPayService();
+  public async createVNPayOrder(orderId: string) {
+    const orderDetail = await this.order.findById(orderId);
+    this.validateOrder(orderDetail);
+    return await this.vnpayService.createOrder(orderDetail);
+  }
+
+  
 }
 
 export default PaymentService;
