@@ -70,4 +70,14 @@ export default class CartController {
       res.status(500).json({ message: error.message });
     }
   };
+
+  public getNumberOfItems = async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const numberOfItems = await this.cartService.getNumberOfItems(userId);
+      res.status(200).json({ data: numberOfItems, message: "getNumberOfItems" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 }

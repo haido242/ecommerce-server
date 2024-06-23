@@ -14,9 +14,10 @@ export default class CartRoute {
   private initializeRoutes() {
     this.router.get(`${this.path}/:userId`, authMiddleware, this.cartController.getCart);
     this.router.post(`${this.path}/:userId`, authMiddleware, this.cartController.addToCart);
+    this.router.get(`${this.path}/:userId/number`, authMiddleware, this.cartController.getNumberOfItems);
     this.router.delete(`${this.path}/:userId/:productId`, authMiddleware, this.cartController.removeFromCart);
     this.router.delete(`${this.path}/:userId`, authMiddleware, this.cartController.clearCart);
     this.router.put(`${this.path}/:userId`, authMiddleware, this.cartController.changeQuantity);
-    this.router.post(`${this.path}/checkout/:userId`, authMiddleware, this.cartController.checkout);
+    this.router.post(`${this.path}/:userId/checkout`, authMiddleware, this.cartController.checkout);
   }
 }

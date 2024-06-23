@@ -5,12 +5,22 @@ export default class ProductService extends BaseService{
     const productModel = ProductModel;
     super(productModel as any);
   }
-
-  public override async get(p, l, s, o) {
+  public async search(p, l, s, o, keyword, category) {
     const skip = (p - 1) * l;
     const sort = { [s]: o };
-    const data = await this.Model.find().skip(skip).limit(l).sort(sort).populate('category', 'name').exec();
-    const total = await this.Model.countDocuments();
+    let query = this.Model.find();
+    
+    if (keyword) {
+      query = query.find({ $text: { $search: keyword } });
+    }
+    
+    if (category) {
+      query = query.find({ category: category });
+    }
+    
+    const data = await query.skip(skip).limit(l).sort(sort).populate('category', 'name').exec();
+    const total = await this.Model.countDocuments(query);
+    
     return { data, total };
   }
 

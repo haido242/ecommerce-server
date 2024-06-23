@@ -23,14 +23,15 @@ export default class BaseController {
     }
     
     public get = async (req: any, res: any) => {
-        const {page, limit, sort, order} = req.query;
+        const {page, limit, sort, order, keyword} = req.query;
         //default value
         const p = page ? parseInt(page) : 1;
         const l = limit ? parseInt(limit) : 10;
         const s = sort ? sort : '_id';
         const o = order ? parseInt(order) : 1;
+        const k = keyword ? keyword : '';
         try {
-            const result = await this.service.get(p, l, s, o)
+            const result = await this.service.get(p, l, s, o, k)
             res.status(200).json({
                 message: 'success',
                 data: result.data,

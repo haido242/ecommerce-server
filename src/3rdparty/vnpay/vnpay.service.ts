@@ -31,7 +31,7 @@ class VNPayService {
           vnp_TxnRef: orderDetail._id,
           vnp_OrderInfo: 'Payment for order ${orderDetail._id}',
           vnp_OrderType: 'billpayment',
-          vnp_ReturnUrl: `http://localhost:4200/vnpay-return`,
+          vnp_ReturnUrl: `http://localhost:3001/success`,
       });
       console.log("urlString", urlString)
     return urlString;
@@ -75,10 +75,16 @@ class VNPayService {
           status: verify.isSuccess,
         });
       }
+      if (verify.isSuccess) {
+        const orderdetails = await this.orderService.getById(verify.vnp_TxnRef);
+        if (orderdetails) {
+          await this.changeStatus(orderdetails, req.query);
+        }
+      }
     } catch (error) {
       return res.status(400).json({ message: 'verify error', status: false });
     }
-
+    
     return res.status(200).json({
       message: verify?.message ?? 'Payment successful!',
       status: verify.isSuccess,

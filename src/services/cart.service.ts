@@ -47,6 +47,13 @@ export default class CartService {
     return cart;
   }
 
+  public async getNumberOfItems(userId) {
+    const cart = await this.cart.findOne({ user: userId });
+    if (!cart) {
+      return 0;
+    }
+    return cart.cartItems.length;
+  }
   public async removeFromCart(userId, productId) {
     const cart = await this.cart.findOne({user: userId });
     if (!cart) {
@@ -72,12 +79,10 @@ export default class CartService {
     const productPrices = await Promise.all(
       cart.cartItems.map(async (item: any) => {
         const product = await this.product.findById(item.product);
-        console.log(product);
         const price = product?.price ?? 0;
         return price * item.quantity;
       })
     );
-    console.log("pricecccccc", productPrices.reduce((a, b) => a + b, 0));
     return productPrices.reduce((a, b) => a + b, 0);
   }
 
@@ -115,6 +120,7 @@ export default class CartService {
   }
 
   public async checkout(userId, shippingAddress, paymentInfo) {
+    console.log("checkout", userId, shippingAddress, paymentInfo);
     const cart = await this.cart.findOne({ user: userId });
     if (!cart) {
       throw new Error("Cart not found");

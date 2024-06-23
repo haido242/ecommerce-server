@@ -12,11 +12,17 @@ export default class BaseService {
         return this.Model.create(data);
     }
 
-    public async get(page: number, limit: number, sort: string, order: number) {
+    public async get(page: number, limit: number, sort: string, order: number, keyword: string) {
         const skip = (page - 1) * limit;
-        const data = await this.Model.find().skip(skip).limit(limit).sort({ [sort]: order } as any);
-        const total = await this.Model.countDocuments();
-        return { data, total };
+        if(keyword) {
+            const data = await this.Model.find({ name: { $regex: keyword, $options: 'i' } }).skip(skip).limit(limit).sort({ [sort]: order } as any);
+            const total = await this.Model.countDocuments({ name: { $regex: keyword, $options: 'i' } });
+            return { data, total };
+        }else {
+            const data = await this.Model.find().skip(skip).limit(limit).sort({ [sort]: order } as any);
+            const total = await this.Model.countDocuments();
+            return { data, total };
+        }
     }
 
     public async getById(id: string) {

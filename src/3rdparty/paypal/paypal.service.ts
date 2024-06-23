@@ -11,7 +11,7 @@ class PaypalService {
   }
   convertToUSD(price) {
     //get exchange rate from VND to USD
-    return price / 23000;
+    return price / 25000;
   }
 
   public async createOrder(orderDetail) {
@@ -21,13 +21,13 @@ class PaypalService {
         "payment_method": "paypal"
       },
       "redirect_urls": {
-        "return_url": "http://return.url",
-        "cancel_url": "http://cancel.url"
+        "return_url": "http://localhost:3001/success",
+        "cancel_url": "http://localhost:3001/shop/cart"
       },
       "transactions": [{
         "amount": {
           "currency": "USD",
-          "total": orderDetail.totalPrice
+          "total": this.convertToUSD(orderDetail.totalPrice)
         },
         "description": "This is the payment description."
       }]

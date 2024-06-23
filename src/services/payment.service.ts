@@ -1,4 +1,4 @@
-import PaypalService from "3rdparty/zalopay/paypal.service";
+import PaypalService from "3rdparty/paypal/paypal.service";
 import ZalopayService from "../3rdparty/zalopay/zalopay.service";
 import VNPayService from "../3rdparty/vnpay/vnpay.service";
 

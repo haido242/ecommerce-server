@@ -29,6 +29,27 @@ export default class ProductController extends BaseController{
     }
   }
 
+  public override get = async (req: any, res: any) => {
+    const { page, limit, sort, order, keyword, category } = req.query;
+    const p = page ? parseInt(page) : 1;
+    const l = limit ? parseInt(limit) : 10;
+    const s = sort ? sort : "_id";
+    const o = order ? parseInt(order) : 1;
+    const k = keyword ? keyword : "";
+    try {
+      const result = await this.productService.search(p, l, s, o, k, category);
+      res.status(200).json({
+        message: "success",
+        data: result.data,
+        total: result.total,
+        page: p,
+        limit: l,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "error", error: error.message });
+    }
+  }
+
   public getLowStock = async (req: any, res: any) => {
     try {
       const data = await this.productService.getLowStock();
