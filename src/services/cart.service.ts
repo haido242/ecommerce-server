@@ -132,6 +132,12 @@ export default class CartService {
     const orderItems = await Promise.all(
       cart.cartItems.map(async item => {
         const product = await this.product.findById(item.product);
+        // change the quantity of product in stock
+        if (product.stockQuantity < item.quantity) {
+          throw new Error("Product is out of stock");
+        }
+        product.stockQuantity -= item.quantity;
+        await product.save();
         return {
           product: product,
           quantity: item.quantity,

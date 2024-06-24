@@ -29,9 +29,9 @@ class VNPayService {
           vnp_Amount: orderDetail.totalPrice,
           vnp_IpAddr: '1.1.1.1',
           vnp_TxnRef: orderDetail._id,
-          vnp_OrderInfo: 'Payment for order ${orderDetail._id}',
+          vnp_OrderInfo: `Payment for order ${orderDetail._id}`,
           vnp_OrderType: 'billpayment',
-          vnp_ReturnUrl: `https://ecommerce-91256.web.app//success`,
+          vnp_ReturnUrl: `http://localhost:3001/success`,
       });
       console.log("urlString", urlString)
     return urlString;

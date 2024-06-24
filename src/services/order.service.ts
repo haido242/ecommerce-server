@@ -19,11 +19,7 @@ class OrderService extends BaseService{
       .limit(limit)
       .sort({ [sort]: order } as any)
       .populate('user', '-password') // Populate user and exclude password field
-      .populate({
-        path: 'orderItems.product',
-        model: 'Product'
-      })
-      .exec();
+.exec();
     const total = await this.order.countDocuments();
     return { data, total };
   }

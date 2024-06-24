@@ -29,15 +29,37 @@ export default class ProductController extends BaseController{
     }
   }
 
-  public override get = async (req: any, res: any) => {
-    const { page, limit, sort, order, keyword, category } = req.query;
+  public getProducts = async (req: any, res: any) => {
+    const { page, limit, sort, order, keyword, category, status} = req.query;
     const p = page ? parseInt(page) : 1;
     const l = limit ? parseInt(limit) : 10;
     const s = sort ? sort : "_id";
     const o = order ? parseInt(order) : 1;
     const k = keyword ? keyword : "";
+    const st = status ? status : "";
     try {
-      const result = await this.productService.search(p, l, s, o, k, category);
+      const result = await this.productService.getProducts(p, l, s, o, k, category, st);
+      res.status(200).json({
+        message: "success",
+        data: result.data,
+        total: result.total,
+        page: p,
+        limit: l,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "error", error: error.message });
+    }
+  }
+  public override get = async (req: any, res: any) => {
+    const { page, limit, sort, order, keyword, category, status} = req.query;
+    const p = page ? parseInt(page) : 1;
+    const l = limit ? parseInt(limit) : 10;
+    const s = sort ? sort : "_id";
+    const o = order ? parseInt(order) : 1;
+    const k = keyword ? keyword : "";
+    const st = status ? status : "";
+    try {
+      const result = await this.productService.getProducts(p, l, s, o, k, category, st);
       res.status(200).json({
         message: "success",
         data: result.data,

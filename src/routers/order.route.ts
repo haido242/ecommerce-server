@@ -14,10 +14,10 @@ class OrderRoute implements Routes{
   }
   
   private initializeRoutes() {
+    this.router.get(`${this.path}/get-user-order/:id`, authMiddleware, this.orderController.getOrdersByUserId);
     this.router.get(`${this.path}`, authMiddleware, authorize(["admin"]), this.orderController.get);
     this.router.get(`${this.path}/:id`, authMiddleware, this.orderController.getById);
     this.router.put(`${this.path}/:id`, authMiddleware, authorize(["admin"]), this.orderController.update);
-    this.router.get(`${this.path}/get-user-order/:id`, authMiddleware, this.orderController.getOrdersByUserId);
   }
 }
 

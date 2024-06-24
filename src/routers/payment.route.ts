@@ -16,6 +16,7 @@ class PaymentRoute implements Routes {
   private initializeRoutes() {
     this.router.post(`${this.path}/create`, authMiddleware, this.paymentController.createOrder);
     this.router.put(`${this.path}/status`, authMiddleware, this.paymentController.changeOrderStatus);
+    this.router.get(`${this.path}/vnpay-return`, this.paymentController.vnpayReturn);
     
   }
 }

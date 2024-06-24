@@ -13,6 +13,16 @@ export default class PaymentController {
     }
   }
 
+  public vnpayReturn = async (req, res) => {
+    try {
+      const verify = await this.paymentService.vnpayReturn(req, res);
+      res.status(200).json({ data: verify, message: "vnpay return" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+
   public changeOrderStatus = async (req, res) => {
     try {
       const orderId = req.body.orderId;

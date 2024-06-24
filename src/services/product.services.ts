@@ -27,4 +27,26 @@ export default class ProductService extends BaseService{
   public async getLowStock() {
     return await this.Model.find({ stockQuantity: { $lt: 10 } }).populate('category', 'name').exec();
   }
+  public async getProducts(p, l, s, o, keyword, category, status) {
+    const skip = (p - 1) * l;
+    const sort = { [s]: o };
+    let query = this.Model.find();
+    
+    if (keyword) {
+      query = query.find({ $or: [{ name: { $regex: keyword, $options: 'i' } }, { description: { $regex: keyword, $options: 'i' } }] });
+    }
+    
+    if (category) {
+      query = query.find({ category: category });
+    }
+    
+    if (status) {
+      query = query.find({ status: status });
+    }
+    
+    const data = await query.skip(skip).limit(l).sort(sort).populate('category', 'name').exec();
+    const total = await this.Model.countDocuments(query);
+    
+    return { data, total };
+  }
 }

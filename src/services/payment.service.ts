@@ -59,6 +59,9 @@ class PaymentService {
     this.validateOrder(orderDetail);
     return await this.vnpayService.createOrder(orderDetail);
   }
+  public async vnpayReturn(req, res) {
+    return await this.vnpayService.vnPayReturn(req, res);
+  }
 
   
 }

@@ -21,8 +21,8 @@ class PaypalService {
         "payment_method": "paypal"
       },
       "redirect_urls": {
-        "return_url": "https://ecommerce-91256.web.app//success",
-        "cancel_url": "https://ecommerce-91256.web.app//shop/cart"
+        "return_url": "http://localhost:3001/success",
+        "cancel_url": "http://localhost:3001/shop/cart"
       },
       "transactions": [{
         "amount": {
